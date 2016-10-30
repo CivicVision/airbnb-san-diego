@@ -68,6 +68,7 @@ findZoning = (lat, long) ->
     if data.rows.length > 0
       zoneCode = data.rows[0].zone_name
       zoneHuman = showHumanReadableZone(zoneCode)
+      document.getElementById('zone').innerHTML = zoneHuman.type
       isAirBnBAllowed zoneHuman.airBnb[home], home for home in ['1','3','6']
     document.getElementById('find-zone').innerHTML = 'Find my zone'
   )
