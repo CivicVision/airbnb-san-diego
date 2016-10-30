@@ -3,15 +3,24 @@ title: Zoning San Diego
 ---
 
 <div class="welcome">
-  <h1>Zoning San Diego</h1>
+  <h1>Is AirBnB allowed in this location?</h1>
   <form>
-    <input type="text" name="zoning" id="address" placeholder="Type your address including house number" />
-    <button id="find-zone" >Find My Zone</button>
+    <input type="text" name="zoning" id="address" placeholder="Type the address including house number" />
+    <button id="find-zone" >Is AirBnB allowed?</button>
   </form>
   <div class="zone">
-    <h3>Your Zone Type is: <span id="zone"></span></h3>
-    <h3>Your Sub Zone Type is: <span id="sub-zone"></span></h3>
-    <h3>Your Zone Code is: <span id="zone-code"></span></h3>
+    <div class="bedroom-type">
+      <h3>1-2 Guest Rooms AirBnB would be <span id="airbnb-allowed-1"></span></h3>
+      <h4 class="hide" id="permit">The host should have a <i id="airbnb-permit-type-1"></i>
+    </div>
+    <div class="bedroom-type">
+      <h3>3-5 Guest Rooms AirBnB would be <span id="airbnb-allowed-3"></span></h3>
+      <h4 class="hide" id="permit">The host should have a <i id="airbnb-permit-type-3"></i>
+    </div>
+    <div class="bedroom-type">
+      <h3>6+ Gues Rooms AirBnB would be <span id="airbnb-allowed-6"></span></h3>
+      <h4 class="hide" id="permit">The host should have a <i id="airbnb-permit-type-6"></i>
+    </div>
   </div>
   <p>Data: <a href="http://data.sandiego.gov/dataset/zoning">Open Data Portal</a>
   <p>Zoning Types from Municipal Code: <a href="http://google.sannet.gov/search?site=scs_municode_ch13&partialfields=&requiredfields=PATH%3Amunicode&client=scs_ocd&filter=0&config=muni_ch13.js&layout_type=titlelink&getfields=DOCUMENT_URL.DOC_NUM.TITLE&proxystylesheet=scs_ocd&output=xml_no_dtd&proxyreload=1&sort=date:A:S:d1&num=100">Chapter 13: Zones</a>

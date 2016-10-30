@@ -34,3 +34,12 @@ h1 {
     margin-bottom: 5em;
   }
 }
+.bedroom-type {
+  margin-bottom: 1.5em;
+  h3 span.allow{
+    color: green;
+  }
+  h3 span.permit {
+    color: red;
+  }
+}

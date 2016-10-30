@@ -1,25 +1,57 @@
-showHumanReadableZone = (zoneCode) ->
+window.isAirBnBAllowed = (airBnB, homes) ->
+  document.getElementById("airbnb-allowed-#{homes}").innerHTML = if airBnB.allowed then 'Allowed' else 'Not Allowed'
+  document.getElementById("airbnb-allowed-#{homes}").classList.toggle('allow', airBnB.allowed)
+  document.getElementById("airbnb-allowed-#{homes}").classList.toggle('permit', !airBnB.allowed)
+  document.getElementById("airbnb-permit-type-#{homes}").innerHTML = airBnB.permit
+
+window.showHumanReadableZone = (zoneCode) ->
   if zoneCode.match(/RE|RS|RX|RT|RM/)
     zone = { type: "Residential"}
     if zoneCode.match(/RE/)
       zone.sub = "Estate"
+      zone.airBnb = airBnb['RE']
     if zoneCode.match(/RS/)
       zone.sub = "Single Unit"
+      zone.airBnb = airBnb['RS']
     if zoneCode.match(/RX/)
       zone.sub = "Small Lot"
+      zone.airBnb = airBnb['RX']
     if zoneCode.match(/RT/)
       zone.sub = "Townhouse"
+      zone.airBnb = airBnb['RT']
     if zoneCode.match(/RM/)
       zone.sub = "Mulitple Unit"
+      if zoneCode.match(/RM-1/)
+        zone.airBnb = airBnb['RM-1']
+      if zoneCode.match(/RM-2/)
+        zone.airBnb = airBnb['RM-2']
+      if zoneCode.match(/RM-3/)
+        zone.airBnb = airBnb['RM-3']
+      if zoneCode.match(/RM-4/)
+        zone.airBnb = airBnb['RM-4']
+      if zoneCode.match(/RM-5/)
+        zone.airBnb = airBnb['RM-5']
     return zone
   if zoneCode.match(/CN|CR|CO|CV|CP/)
-    return "Commercial"
+    zone = { type: "Commercial"}
+    zone.airBnb = airBnb['Commercial']
+    return zone
   if zoneCode.match(/IP|IL|IH|IS|IBT/)
-    return "Industrial"
+    zone = { type: "Industrial"}
+    zone.airBnb = airBnb['default']
+    return zone
   if zoneCode.match(/OP|OC|OR|OF/)
-    return "Open Space"
+    zone = { type: "Open Space"}
+    zone.airBnb = airBnb['default']
+    if zoneCode.match(/OR/)
+      zone.airBnb = airBnb['OR']
+    return zone
   if zoneCode.match(/AG|AR/)
-    return "Agricultural"
+    zone = { type: "Agricultural"}
+    zone.airBnb = airBnb['default']
+    if zoneCode.match(/AR/)
+      zone.airBnb = airBnb['AR']
+    return zone
   return zoneCode
 findLatLng = (address) ->
   fetch("https://search.mapzen.com/v1/search?text=#{address}&boundary.country=USA&api_key=mapzen-Rxq2xk8")
@@ -36,9 +68,7 @@ findZoning = (lat, long) ->
     if data.rows.length > 0
       zoneCode = data.rows[0].zone_name
       zoneHuman = showHumanReadableZone(zoneCode)
-      document.getElementById('zone').innerHTML = zoneHuman.type
-      document.getElementById('sub-zone').innerHTML = zoneHuman.sub
-      document.getElementById('zone-code').innerHTML = zoneCode
+      isAirBnBAllowed zoneHuman.airBnb[home], home for home in ['1','3','6']
     document.getElementById('find-zone').innerHTML = 'Find my zone'
   )
   .error((errors) ->
