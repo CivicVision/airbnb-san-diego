@@ -1,8 +1,27 @@
----
-title: Bed &amp; Breakfast San Diego
----
+<!doctype html>
+<html>
+  <head>
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <meta charset="utf-8">
+    <meta content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" name="viewport">
 
-<div class="welcome">
+    <!-- Use title if it's in the page YAML frontmatter -->
+    <title>Bed &amp; Breakfast San Diego</title>
+
+    <link href='//fonts.googleapis.com/css?family=Lato:300,400' rel='stylesheet' type='text/css'>
+
+    <!-- Google Tag Manager -->
+    <script>
+      (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start': new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0], j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src= 'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f); })(window,document,'script','dataLayer','GTM-MTT6KM');
+    </script>
+    <!-- End Google Tag Manager -->
+
+    <link href="stylesheets/site.css" rel="stylesheet" />
+    <script src="http://libs.cartocdn.com/cartodb.js/v3/3.15/cartodb.js"></script><script src="javascripts/site.js"></script>
+  </head>
+
+  <body class="index">
+    <div class="welcome">
   <h1>Is AirBnB allowed in this location?</h1>
   <form>
     <input type="text" name="zoning" id="address" placeholder="Type the address including house number" />
@@ -28,3 +47,6 @@ title: Bed &amp; Breakfast San Diego
   <p>Data: <a href="http://data.sandiego.gov/dataset/zoning">Open Data Portal</a>
   <p>Zoning Types from Municipal Code: <a href="http://google.sannet.gov/search?site=scs_municode_ch13&partialfields=&requiredfields=PATH%3Amunicode&client=scs_ocd&filter=0&config=muni_ch13.js&layout_type=titlelink&getfields=DOCUMENT_URL.DOC_NUM.TITLE&proxystylesheet=scs_ocd&output=xml_no_dtd&proxyreload=1&sort=date:A:S:d1&num=100">Chapter 13: Zones</a>
 </div><!-- .welcome -->
+
+  </body>
+</html>

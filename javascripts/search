@@ -1,0 +1,141 @@
+(function() {
+  var findLatLng, findZoning;
+
+  window.isAirBnBAllowed = function(airBnB, homes) {
+    document.getElementById("airbnb-allowed-" + homes).innerHTML = airBnB.allowed ? 'Allowed' : 'Not Allowed';
+    document.getElementById("airbnb-allowed-" + homes).classList.toggle('allow', airBnB.allowed);
+    document.getElementById("airbnb-allowed-" + homes).classList.toggle('permit', !airBnB.allowed);
+    return document.getElementById("airbnb-permit-type-" + homes).innerHTML = airBnB.permit;
+  };
+
+  window.showHumanReadableZone = function(zoneCode) {
+    var zone;
+    if (zoneCode.match(/RE|RS|RX|RT|RM/)) {
+      zone = {
+        type: "Residential"
+      };
+      if (zoneCode.match(/RE/)) {
+        zone.sub = "Estate";
+        zone.airBnb = airBnb['RE'];
+      }
+      if (zoneCode.match(/RS/)) {
+        zone.sub = "Single Unit";
+        zone.airBnb = airBnb['RS'];
+      }
+      if (zoneCode.match(/RX/)) {
+        zone.sub = "Small Lot";
+        zone.airBnb = airBnb['RX'];
+      }
+      if (zoneCode.match(/RT/)) {
+        zone.sub = "Townhouse";
+        zone.airBnb = airBnb['RT'];
+      }
+      if (zoneCode.match(/RM/)) {
+        zone.sub = "Mulitple Unit";
+        if (zoneCode.match(/RM-1/)) {
+          zone.airBnb = airBnb['RM-1'];
+        }
+        if (zoneCode.match(/RM-2/)) {
+          zone.airBnb = airBnb['RM-2'];
+        }
+        if (zoneCode.match(/RM-3/)) {
+          zone.airBnb = airBnb['RM-3'];
+        }
+        if (zoneCode.match(/RM-4/)) {
+          zone.airBnb = airBnb['RM-4'];
+        }
+        if (zoneCode.match(/RM-5/)) {
+          zone.airBnb = airBnb['RM-5'];
+        }
+      }
+      return zone;
+    }
+    if (zoneCode.match(/CN|CR|CO|CV|CP/)) {
+      zone = {
+        type: "Commercial"
+      };
+      zone.airBnb = airBnb['Commercial'];
+      return zone;
+    }
+    if (zoneCode.match(/IP|IL|IH|IS|IBT/)) {
+      zone = {
+        type: "Industrial"
+      };
+      zone.airBnb = airBnb['default'];
+      return zone;
+    }
+    if (zoneCode.match(/OP|OC|OR|OF/)) {
+      zone = {
+        type: "Open Space"
+      };
+      zone.airBnb = airBnb['default'];
+      if (zoneCode.match(/OR/)) {
+        zone.airBnb = airBnb['OR'];
+      }
+      return zone;
+    }
+    if (zoneCode.match(/AG|AR/)) {
+      zone = {
+        type: "Agricultural"
+      };
+      zone.airBnb = airBnb['default'];
+      if (zoneCode.match(/AR/)) {
+        zone.airBnb = airBnb['AR'];
+      }
+      return zone;
+    }
+    return zoneCode;
+  };
+
+  findLatLng = function(address) {
+    return fetch("https://search.mapzen.com/v1/search?text=" + address + "&boundary.country=USA&api_key=mapzen-Rxq2xk8").then(function(response) {
+      return response.json();
+    }).then(function(data) {
+      return data.features[0].geometry.coordinates;
+    });
+  };
+
+  findZoning = function(lat, long) {
+    var query, sql;
+    query = "SELECT * FROM city_zoning_sd WHERE ST_CONTAINS(the_geom,ST_SetSRID(ST_MakePoint({{long}},{{lat}}),4326))";
+    sql = new cartodb.SQL({
+      user: 'milafrerichs'
+    });
+    return sql.execute(query, {
+      lat: lat,
+      long: long
+    }).done(function(data) {
+      var home, i, len, ref, zoneCode, zoneHuman;
+      if (data.rows.length > 0) {
+        zoneCode = data.rows[0].zone_name;
+        zoneHuman = showHumanReadableZone(zoneCode);
+        document.getElementById('zone').innerHTML = zoneHuman.type;
+        ref = ['1', '3', '6'];
+        for (i = 0, len = ref.length; i < len; i++) {
+          home = ref[i];
+          isAirBnBAllowed(zoneHuman.airBnb[home], home);
+        }
+      }
+      return document.getElementById('find-zone').innerHTML = 'Find my zone';
+    }).error(function(errors) {
+      document.getElementById('find-zone').innerHTML = 'Find my zone';
+      return alert('Somethign went wrong. Please try again.');
+    });
+  };
+
+  window.onload = function() {
+    return document.getElementById('find-zone').addEventListener("click", function(event) {
+      var address;
+      this.innerHTML = 'Searching ...';
+      event.preventDefault();
+      address = document.getElementById('address').value;
+      if (!address.match(/San Diego/)) {
+        address += ", San Diego";
+      }
+      return findLatLng(address).then(function(coordinates) {
+        return findZoning(coordinates[1], coordinates[0]);
+      });
+    }, false);
+  };
+
+}).call(this);
