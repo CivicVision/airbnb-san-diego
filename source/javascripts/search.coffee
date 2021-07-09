@@ -54,11 +54,11 @@ window.showHumanReadableZone = (zoneCode) ->
     return zone
   return zoneCode
 findLatLng = (address) ->
-  fetch("https://search.mapzen.com/v1/search?text=#{address}&boundary.country=USA&api_key=mapzen-Rxq2xk8")
+	fetch("https://api.geocod.io/v1.6/geocode?q=#{address}&&api_key=#{GEOCODE_API_KEY}")
   .then( (response) ->
     response.json()
   ).then( (data) ->
-    data.features[0].geometry.coordinates
+		data.results[0].location
   )
 findZoning = (lat, long) ->
   query = "SELECT * FROM city_zoning_sd WHERE ST_CONTAINS(the_geom,ST_SetSRID(ST_MakePoint({{long}},{{lat}}),4326))"
@@ -84,6 +84,6 @@ window.onload= () ->
     unless address.match(/San Diego/)
       address += ", San Diego"
     findLatLng(address).then( (coordinates) ->
-      findZoning(coordinates[1], coordinates[0])
+      findZoning(coordinates.lat, coordinates.lng)
     )
   , false)
