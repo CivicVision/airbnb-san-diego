@@ -88,10 +88,10 @@
   };
 
   findLatLng = function(address) {
-    return fetch("https://search.mapzen.com/v1/search?text=" + address + "&boundary.country=USA&api_key=mapzen-Rxq2xk8").then(function(response) {
+    return fetch("https://api.geocod.io/v1.6/geocode?q=" + address + "&&api_key=" + GEOCODE_API_KEY).then(function(response) {
       return response.json();
     }).then(function(data) {
-      return data.features[0].geometry.coordinates;
+      return data.results[0].location;
     });
   };
 
@@ -133,7 +133,7 @@
         address += ", San Diego";
       }
       return findLatLng(address).then(function(coordinates) {
-        return findZoning(coordinates[1], coordinates[0]);
+        return findZoning(coordinates.lat, coordinates.lng);
       });
     }, false);
   };
