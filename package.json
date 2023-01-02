@@ -13,8 +13,8 @@
     "whatwg-fetch": "^1.0.0"
   },
   "devDependencies": {
-    "coffee-loader": "^0.7.2",
+    "coffee-loader": "^4.0.0",
     "coffee-script": "^1.11.1",
-    "webpack": "^1.13.3"
+    "webpack": "^5.75.0"
   }
 }
